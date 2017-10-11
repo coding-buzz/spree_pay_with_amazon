@@ -38,7 +38,7 @@ module Spree
       end
       order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
-      response = @mws.authorize(gateway_options[:order_id], amount / 100.0, Spree::Config.currency)
+      response = @mws.authorize(gateway_options[:order_id], amount / 100.0, 'EUR')
       if response["ErrorResponse"]
         return ActiveMerchant::Billing::Response.new(false, response["ErrorResponse"]["Error"]["Message"], response)
       end
@@ -56,7 +56,7 @@ module Spree
       load_amazon_mws(order.amazon_order_reference_id)
 
       authorization_id = order.amazon_transaction.authorization_id
-      response = @mws.capture(authorization_id, "C#{Time.now.to_i}", amount / 100.00, Spree::Config.currency)
+      response = @mws.capture(authorization_id, "C#{Time.now.to_i}", amount / 100.00, 'EUR')
       t = order.amazon_transaction
       t.capture_id = response.fetch("CaptureResponse", {}).fetch("CaptureResult", {}).fetch("CaptureDetails", {}).fetch("AmazonCaptureId", nil)
       t.save!
@@ -72,7 +72,7 @@ module Spree
       order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
-      response = @mws.refund(capture_id, gateway_options[:order_id], amount / 100.00, Spree::Config.currency)
+      response = @mws.refund(capture_id, gateway_options[:order_id], amount / 100.00, 'EUR')
       return ActiveMerchant::Billing::Response.new(true, "Success", response)
     end
 
@@ -80,7 +80,7 @@ module Spree
       order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
-      response = @mws.refund(capture_id, gateway_options[:order_id], order.total, Spree::Config.currency)
+      response = @mws.refund(capture_id, gateway_options[:order_id], order.total, 'EUR')
       return ActiveMerchant::Billing::Response.new(true, "Success", response)
     end
 
