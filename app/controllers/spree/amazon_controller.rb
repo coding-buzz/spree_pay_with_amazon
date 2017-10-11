@@ -42,6 +42,7 @@ class Spree::AmazonController < Spree::StoreController
                               "firstname" => "Amazon",
                               "lastname" => "User",
                               "address1" => "TBD",
+                              "address2" => "TBD",
                               "phone" => "TBD",
                               "city" => address["City"],
                               "zipcode" => address["PostalCode"],
@@ -81,7 +82,8 @@ class Spree::AmazonController < Spree::StoreController
         spree_address.update({
                                 "firstname" => first_name,
                                 "lastname" => last_name,
-                                "address1" => address["AddressLine1"],
+                                "address1" => address["AddressLine1"] || "empty",
+                                "address2" => address["AddressLine2"] || "empty",
                                 "phone" => address["Phone"] || "n/a",
                                 "city" => address["City"],
                                 "zipcode" => address["PostalCode"],
