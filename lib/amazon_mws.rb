@@ -148,9 +148,9 @@ class AmazonMws
                     'OffAmazonPayments'
                   end
     query_string = hash.sort.map { |k, v| "#{k}=#{ custom_escape(v) }" }.join("&")
-    message = ["POST", "mws.amazonservices.com", "/#{sandbox_str}/2013-01-01", query_string].join("\n")
+    message = ["POST", "mws-eu.amazonservices.com", "/#{sandbox_str}/2013-01-01", query_string].join("\n")
     query_string += "&Signature=" + custom_escape(Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, Spree::Config[:amazon_aws_secret_access_key], message)).strip)
-    HTTParty.post("https://mws.amazonservices.com/#{sandbox_str}/2013-01-01", :body => query_string)
+    HTTParty.post("https://mws-eu.amazonservices.com/#{sandbox_str}/2013-01-01", :body => query_string)
   end
 
   def custom_escape(val)
