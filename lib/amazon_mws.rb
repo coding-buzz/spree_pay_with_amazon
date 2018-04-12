@@ -37,9 +37,10 @@ end
 class AmazonMws
   require 'httparty'
 
-  def initialize(number, test_mode)
+  def initialize(number, test_mode, amazon_payment_config)
     @number = number
     @test_mode = test_mode
+    @amazon_payment_config = amazon_payment_config
   end
 
 
@@ -130,8 +131,8 @@ class AmazonMws
 
   def default_hash
     {
-      "AWSAccessKeyId"=>Spree::Config[:amazon_aws_access_key_id],
-      "SellerId"=>Spree::Config[:amazon_merchant_id],
+      "AWSAccessKeyId"=>@amazon_payment_config.amazon_aws_access_key_id,
+      "SellerId"=>@amazon_payment_config.amazon_merchant_id,
       "PlatformId"=>"A31NP5KFHXSFV1",
       "SignatureMethod"=>"HmacSHA256",
       "SignatureVersion"=>"2",
@@ -149,7 +150,7 @@ class AmazonMws
                   end
     query_string = hash.sort.map { |k, v| "#{k}=#{ custom_escape(v) }" }.join("&")
     message = ["POST", "mws-eu.amazonservices.com", "/#{sandbox_str}/2013-01-01", query_string].join("\n")
-    query_string += "&Signature=" + custom_escape(Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, Spree::Config[:amazon_aws_secret_access_key], message)).strip)
+    query_string += "&Signature=" + custom_escape(Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, @amazon_payment_config.amazon_aws_secret_access_key, message)).strip)
     HTTParty.post("https://mws-eu.amazonservices.com/#{sandbox_str}/2013-01-01", :body => query_string)
   end
 

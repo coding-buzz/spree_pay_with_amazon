@@ -96,7 +96,10 @@ module Spree
     private
 
     def load_amazon_mws(reference)
-      @mws ||= AmazonMws.new(reference, self.preferred_test_mode)
+      amazon_transaction = Spree::AmazonTransaction.where(order_reference: reference).first
+      order = Spree::Order.find(amazon_transaction.order_id)
+      amazon_payment_config = order.store.spree_amazon_payment_config
+      @mws ||= AmazonMws.new(reference, self.preferred_test_mode, amazon_payment_config)
     end
   end
 end

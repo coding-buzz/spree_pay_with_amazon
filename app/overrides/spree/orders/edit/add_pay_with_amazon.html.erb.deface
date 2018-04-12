@@ -1,4 +1,5 @@
 <!-- insert_bottom "[data-hook='cart_buttons']" -->
-<% if Spree::Gateway::Amazon.count > 0 %>
+<% unless @amazon_payment_config.nil? %>
   <%= render :partial => "spree/amazon/login" %>
 <% end %>
+

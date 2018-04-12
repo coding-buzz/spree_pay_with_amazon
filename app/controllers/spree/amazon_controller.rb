@@ -74,7 +74,6 @@ class Spree::AmazonController < Spree::StoreController
 
       if data.destination && data.destination["PhysicalDestination"]
         current_order.email = data.email
-        current_order.save!
         address = data.destination["PhysicalDestination"]
         first_name = address["Name"].split(" ")[0] rescue "Amazon"
         last_name = address["Name"].split(" ")[1..10].join(" ")
@@ -134,7 +133,7 @@ class Spree::AmazonController < Spree::StoreController
 
   def load_amazon_mws
     render :nothing => true, :status => 200 if current_order.amazon_order_reference_id.nil?
-    @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, Spree::Gateway::Amazon.first.preferred_test_mode)
+    @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, Spree::Gateway::Amazon.first.preferred_test_mode, @amazon_payment_config)
   end
 
   private
