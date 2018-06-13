@@ -57,7 +57,7 @@ class Spree::AmazonController < Spree::StoreController
 
       current_order.reload
     else
-      render plain: "Unable to load Address data from Amazon"
+      render plain: "Unable to load Address data from Amazon", :layout => false
       return
     end
     render :layout => false
