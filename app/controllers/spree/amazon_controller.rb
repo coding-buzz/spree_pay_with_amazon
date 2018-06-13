@@ -134,7 +134,7 @@ class Spree::AmazonController < Spree::StoreController
 
   def load_amazon_mws
     render :nothing => true, :status => 200 if current_order.amazon_order_reference_id.nil?
-    @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, Spree::Gateway::Amazon.first.preferred_test_mode, @amazon_payment_config)
+    @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, @amazon_payment_config.use_sandbox, @amazon_payment_config)
   end
 
   private
