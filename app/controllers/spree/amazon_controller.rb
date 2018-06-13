@@ -57,7 +57,8 @@ class Spree::AmazonController < Spree::StoreController
 
       current_order.reload
     else
-      return redirect_to address_amazon_order_path, :notice => "Unable to load Address data from Amazon"
+      render plain: "Unable to load Address data from Amazon"
+      return
     end
     render :layout => false
   end
