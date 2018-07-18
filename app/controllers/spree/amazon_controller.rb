@@ -74,7 +74,7 @@ class Spree::AmazonController < Spree::StoreController
       data = @mws.fetch_order_data
 
       if data.destination && data.destination["PhysicalDestination"]
-        current_order.email = data.email
+        current_order.update(email: data.email)
         address = data.destination["PhysicalDestination"]
         first_name = address["Name"].split(" ")[0] rescue "Amazon"
         last_name = address["Name"].split(" ")[1..10].join(" ")
