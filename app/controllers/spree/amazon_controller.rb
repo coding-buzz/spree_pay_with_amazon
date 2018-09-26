@@ -77,7 +77,7 @@ class Spree::AmazonController < Spree::StoreController
         current_order.update(email: data.email)
         address = data.destination["PhysicalDestination"]
         first_name = address["Name"].split(" ")[0] rescue "Amazon"
-        last_name = address["Name"].split(" ")[1..10].join(" ")
+        last_name = address["Name"].split(" ")[1..10].join(" ") rescue "Amazon"
         spree_address = current_order.ship_address
         spree_address.update({
                                 "firstname" => first_name,
